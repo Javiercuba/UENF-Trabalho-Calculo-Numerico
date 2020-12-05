@@ -8,54 +8,68 @@ int convergenciaJacobiDiagonalLinhas(int compara_linha[4],int compara_coluna[4],
          for(int j=1;j<=4;j++){
              if(i=j){
                 compara_linha[i]<matriz_geral[i][j]?printf(" Linha %d convergente\n",i) :  printf(" Linha %d nao converge\n",i,passou_no_teste=false);
+                
                 compara_coluna[i]<matriz_geral[i][j]?printf(" Coluna %d convergente\n",i) : printf(" Coluna %d nao converge\n",i,passou_no_teste=false);
              }
             
          }
          
      }
-     passou_no_teste? printf("Atende os criterios de Convergencia\n") : printf("Não atende os criterios de Convergencia\n");
+     passou_no_teste? printf("Atende os criterios de Convergencia\n\n\n") : printf("Não atende os criterios de Convergencia\n\n\n");
 }
 
-int calculaIntegracaoJacobi(float diagonal[4],float resultados_de_cada_linha[4]){
-      float  solucao_inicial[4];
+int calculaIntegracaoJacobi(float diagonal[4],float resultados_de_cada_linha[4],float matriz[4][4],float proximos_pontos[4]){
+      float  solucao_inicial_zero[4],guarda_somatorio=0;
       
-         for(int j=1;j<=4;j++){
-           solucao_inicial[j]=resultados_de_cada_linha[j]/diagonal[j];//PROBLEMA COM NUMERO NEGATIVO
-          
-            printf("%.2f\n",solucao_inicial[j]);
+      //INCREMENTANDO VALORES NO VETOR INCIAL x0
+         for(int add=1;add<=4;add++){
+           solucao_inicial_zero[add]=resultados_de_cada_linha[add]/diagonal[add];
+            printf("RESULTADO INICIAL  X0 %.2f\n",solucao_inicial_zero[add]);
+         }
+         printf("===========================================================================\n");
+         for(int i=1;i<=4;i++){//PERCORRER ATE 3
+         guarda_somatorio=0;
+             for(int j=1;j<=4;j++){
+                 if(i!=j){
+                  guarda_somatorio+= (matriz[i][j]*solucao_inicial_zero[j]);
+
+                    }
+                  }
+                  
+                  proximos_pontos[i]=(1/diagonal[i]) * (resultados_de_cada_linha[i] - (guarda_somatorio) );
+            printf("RESULTADO FINAL X1:%.2f\n",proximos_pontos[i]);
             
          }
+         printf("=================================Verificando se o ponto é maior que a precisão================================\n");
+         //TERMINAR ISSO
+        
+           
+         }
          
-     
-      
-      
-      //    solucao_incial= igualdade/x1;
-    //     xzero=igualdade/x1;
-      
-    //  x=(1/x1)*(igualdade - )
+int calculaMaior(float vetor[4]){
+    
 }
 
 
 int main()
 {
-  int matriz[4][4];       //MATRIZ PRINCIPAL
+  float matriz[4][4];       //MATRIZ PRINCIPAL
   int somaLinha=0;        //VARIAVEL PARA INCREMENTAR O VALOR DAS LINHAS
   int somaColuna=0       ;// ''      ''       ''     '  '      '' COLUNAS
-  int resultado_linha[4];//GUARDA A SOMA DAS LINHAS
+  int resultado_linha[4];//GUARDA A SOMA TOTAL DAS LINHAS
   int resultado_coluna[5]={0,0,0,0,0};//GUARDA A SOMA DAS COLUNAS
-  int posicoes_iguais[4];   //GUARDA AS POSIÇOES DA DIAGONAL
-  int resultado_equacoes[4];//GUARDA O RESULTADO FINAL DE CADA LINHA
-   
+  float posicoes_iguais[4];   //GUARDA AS POSIÇOES DA DIAGONAL
+  float resultado_equacoes[4];//GUARDA O RESULTADO FINAL DE CADA LINHA
+  float solucao_final_um[4]; //GUARDA A SEQUENCIA DE PONTOS ATE CONVERGIR
  
     for(int i=1;i<=4;i++){//CRIANDO A MATRIZ 4X4
         somaLinha=0;
         for(int j=1;j<=4;j++){
             
         printf ("Posicao[%d][%d] = ",i, j);
-        scanf ("%d", &matriz[ i ][ j ]);
+        scanf ("%f", &matriz[ i ][ j ]);
          if(i!=j){
-             somaLinha=somaLinha+matriz[i][j];//SOMANDO OS VALORES DAS LINHAS E GUARDANDO EM UM VETOR
+             somaLinha+=matriz[i][j];//SOMANDO OS VALORES DAS LINHAS E GUARDANDO EM UM VETOR
              resultado_coluna[j]=matriz[i][j]+resultado_coluna[j]; //SOMANDO OS VALORES DAS COLUNAS E GUARDADNO EM UM VETOR 
             }else{
                 posicoes_iguais[j]=matriz[i][j];
@@ -65,8 +79,8 @@ int main()
         }
         
         printf("Digite o resultado da equacao %d = " ,i);
-        scanf("%d",&resultado_equacoes[i]);
-        printf("Linha 1 : |%d %d %d %d|= %d\n\n",matriz[i][1],matriz[i][2],matriz[i][3],matriz[i][4],resultado_equacoes[i]);
+        scanf("%f",&resultado_equacoes[i]);
+        printf("Linha 1 : |%f %f %f %f|= %.1f\n\n",matriz[i][1],matriz[i][2],matriz[i][3],matriz[i][4],resultado_equacoes[i]);
         printf("Soma total da Linha %d = %d\n\n",i,resultado_linha[i]);
 
     }
@@ -81,7 +95,7 @@ int main()
     //
     
    
-     calculaIntegracaoJacobi(posicoes_iguais,resultado_equacoes);
+     calculaIntegracaoJacobi(posicoes_iguais,resultado_equacoes,matriz,solucao_final_um);
     
     
     
