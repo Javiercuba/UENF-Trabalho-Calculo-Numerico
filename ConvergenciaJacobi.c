@@ -18,20 +18,33 @@ int convergenciaJacobiDiagonalLinhas(int compara_linha[4],int compara_coluna[4],
      passou_no_teste? printf("Atende os criterios de Convergencia\n\n\n") : printf("Não atende os criterios de Convergencia\n\n\n");
 }
 
-int passarPositivo(float x[4]){
+int VetorTodoPositivo(float x[4]){
     
      for(int y=1;y<=4;y++){
         if(x[y]<0.0){
             x[y]=x[y]*(-1);
             
         }
-        printf("RESULTADO FINAL X1 POSITIVO:%.2f\n",x[y]);
+        printf("RESULTADO :%.2f\n",x[y]);
        }
     
 }
 
+int MaiorValor(float x[4]){
+    float maior=0;
+    for(int y=1;y<=4;y++){
+        if(x[y]>maior){
+            maior=x[y];
+        }
+        
+       }
+       
+       printf("MAIOR VALOR :%.2f\n",maior);
+     
+}
+
 int calculaIntegracaoJacobi(float diagonal[4],float resultados_de_cada_linha[4],float matriz[4][4],float proximos_pontos[4]){
-      float  solucao_inicial_zero[4],guarda_somatorio=0;
+      float  solucao_inicial_zero[4],guarda_somatorio=0,resultado_x0_menos_x1[4],criterio_de_parada;
       
       //INCREMENTANDO VALORES NO VETOR INCIAL x0
          for(int add=1;add<=4;add++){
@@ -39,7 +52,7 @@ int calculaIntegracaoJacobi(float diagonal[4],float resultados_de_cada_linha[4],
             printf("RESULTADO INICIAL  X0 %.2f\n",solucao_inicial_zero[add]);
          }
          printf("===========================================================================\n");
-         for(int i=1;i<=4;i++){//PERCORRER ATE 3
+         for(int i=1;i<=4;i++){
          guarda_somatorio=0;
              for(int j=1;j<=4;j++){
                  if(i!=j){
@@ -52,17 +65,27 @@ int calculaIntegracaoJacobi(float diagonal[4],float resultados_de_cada_linha[4],
             printf("RESULTADO FINAL X1:%.2f\n",proximos_pontos[i]);
             
          }
+         
+          printf("=================================RESULTADO DA SUBTRAÇAO DO VETOR X0 COM X1 EM MODULO================================\n");
+            for(int c=1;c<=4;c++ ){
+                     resultado_x0_menos_x1[c]=solucao_inicial_zero[c] - proximos_pontos[c];
+              }
+              VetorTodoPositivo(resultado_x0_menos_x1);
+            
         
          
-          printf("=================================Deixando todos os valores positivos================================\n");
-         //DEIXAR O VETOR POSITIVO
-         passarPositivo(proximos_pontos);
-           
-
-          printf("=================================Verificando se o ponto é maior que a precisão================================\n");
+          printf("=================================VETOR X1 POSITIVO================================\n");
+         VetorTodoPositivo(proximos_pontos);
+          printf("=================================MAIOR VALOR DO VETOR X1================================\n");
+          MaiorValor(proximos_pontos);
+          
+           printf("=================================MAIOR VALOR DA SUBTRAÇAO================================\n");
+          MaiorValor(resultado_x0_menos_x1);
+          
+           printf("=================================CRITERIO DE PARADA================================\n\n");
+         // criterio_de_parada =  MaiorValor(resultado_x0_menos_x1);
+         // printf("VALOR DO CRITERIO DE PARADA INCIAL: %.4f ", MaiorValor(resultado_x0_menos_x1));
          
-        
-           
          }
          
 
@@ -113,8 +136,11 @@ int main()
     convergenciaJacobiDiagonalLinhas(resultado_linha,resultado_coluna,matriz);
     //
     
-   
      calculaIntegracaoJacobi(posicoes_iguais,resultado_equacoes,matriz,solucao_final_um);
+   /*ESTA FUNÇAO FAZ:
+   ->ISOLA O X DA FUNÇAO
+   ->
+   */
     
     
     
