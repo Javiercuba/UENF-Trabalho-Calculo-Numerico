@@ -51,15 +51,44 @@ float PontoCritico(float vetor[4]){
    
 }
 
-float TrocaGauss(float vetor_zero[4],float vetor_um[4],int i){
-    if(vetor_um[i]!= 0 ){
-        vetor_zero[i]=vetor_um[i];
-        return vetor_zero[i];
-    }
+float TrocaGauss(float vetor_zero[4],float vetor_um[4],float troca_valores[4],int i){
+ 
+
+
+    if(vetor_um[i]== 0 ){
     
-    return vetor_zero[i];
+        
+       // printf("SAINDO VALOR DE TROCA GAUSS DO TROCA NORMAL %.2f\n",troca_valores[i]);
+        return troca_valores[i];
+    }else{
+       troca_valores[i]=vetor_um[i];
+    //    printf("SAINDO VALOR DE TROCA GAUSS DO X1 COM VALOR %.2f\n",troca_valores[i]);
+      return troca_valores[i];
+    }
+   
+    
     
 }
+
+int EscolheMetodo(){
+    
+}
+int Chama(float diagonal[4],float resultados_de_cada_linha[4],float matriz[4][4],float vetor_x_um[4],float vetor_x_zero[4],int numero_interacoes){
+         int escolha_metodo;
+     printf("Voce deseja testar qual metodo primeiro ?\n JACOBI? APERTE 1\n GAUSS? APERTE 2\n =");
+     scanf("%d",&escolha_metodo);
+     switch (escolha_metodo) {
+            case 1:
+                printf("METODO JACOBI\n");
+                calculaIntegracaoJacobi(posicoes_iguais,resultado_equacoes,matriz,solucao_final_um,vetor_x_zero,numero_interacoes);
+               break;
+           case 2:
+                printf("METODO GAUSS\n");
+                 calculaIntegracaoGauss(posicoes_iguais,resultado_equacoes,matriz,solucao_final_um,vetor_x_zero,numero_interacoes);
+                break;
+       }
+        
+    }
 
 int calculaIntegracaoJacobi(float diagonal[4],float resultados_de_cada_linha[4],float matriz[4][4],float vetor_x_um[4],float vetor_x_zero[4],int numero_interacoes){
     numero_interacoes++;
@@ -96,13 +125,13 @@ int calculaIntegracaoJacobi(float diagonal[4],float resultados_de_cada_linha[4],
               }
            
           
-           printf("=================================CRITERIO DE PARADA================================\n\n");
+           printf("======================RESULTADO CRITERIO DE PARADA JACOBI================================\n\n");
           
          criterio_de_parada=PontoCritico(resultado_x0_menos_x1)/PontoCritico(vetor_x_um);
            printf("VALOR DO CRITERIO DE PARADA ATUAL: %.5f\n", criterio_de_parada); 
            printf("VALOR DA PRECISÃO: %.5f\n", precisao);
-           printf("NUMERO DE INTERAÇOES: %d\n ",numero_interacoes);
-            printf("=================================CRITERIO DE PARADA================================\n\n");
+           printf("NUMERO DE INTERAÇOES JACOBI: %d\n ",numero_interacoes);
+            printf("======================RESULTADO CRITERIO DE PARADA JACOBI================================\n\n");
           
            if(criterio_de_parada>precisao){
                 for(int troca=1;troca<=4;troca++){
@@ -121,11 +150,12 @@ int calculaIntegracaoGauss(float diagonal[4],float resultados_de_cada_linha[4],f
       float  guarda_somatorio=0,resultado_x0_menos_x1[4]={0,0,0,0};
       float criterio_de_parada=0;
       float precisao=0.00004;
-     
+      float troca_valores[4];
       
       //MOSTRANDO VALORES NO VETOR INCIAL x0
          for(int add=1;add<=4;add++){
-            printf("RESULTADO INICIAL  X0 %.2f\n",vetor_x_zero[add]);
+             troca_valores[add]= vetor_x_zero [add];
+            printf("RESULTADO INICIAL  X%d %.2f\n",numero_interacoes-1,vetor_x_zero[add]);
          }
          
          printf("===========================================================================\n");
@@ -134,43 +164,51 @@ int calculaIntegracaoGauss(float diagonal[4],float resultados_de_cada_linha[4],f
          guarda_somatorio=0;
              for(int j=1;j<=4;j++){
                  if(i!=j){
-                  guarda_somatorio+= (matriz[i][j]*TrocaGauss(vetor_x_zero,vetor_x_um,i));
-
+                    guarda_somatorio+= (matriz[i][j]*TrocaGauss(vetor_x_zero,vetor_x_um,troca_valores,j));
+                  
                     }
                   }
+               
                   
                   vetor_x_um[i]=(1/diagonal[i]) * (resultados_de_cada_linha[i] - (guarda_somatorio) );
-            printf("RESULTADO FINAL X1:%.2f\n",vetor_x_um[i]);
+            printf("RESULTADO FINAL X%d :%.2f\n",numero_interacoes,vetor_x_um[i]);
             
          }
          
-          printf("=================================RESULTADO DA SUBTRAÇAO DO VETOR X0 COM X1================================\n");
+          printf("================================================================\n");
             for(int c=1;c<=4;c++ ){
                      resultado_x0_menos_x1[c]=vetor_x_zero[c] - vetor_x_um[c];
-                     printf("RESULTADO DA SUBTRAÇÃO: %.2f\n",resultado_x0_menos_x1[c]);
+                     printf("RESULTADO DA SUBTRAÇÃO X%d-X%d: %.2f\n",numero_interacoes-1,numero_interacoes,resultado_x0_menos_x1[c]);
               }
            
           
-           printf("=================================CRITERIO DE PARADA================================\n\n");
+           printf("=======RESULTADOS DO CRITERIO DE PARADA GAUSS===============\n\n");
           
          criterio_de_parada=PontoCritico(resultado_x0_menos_x1)/PontoCritico(vetor_x_um);
-           printf("VALOR DO CRITERIO DE PARADA ATUAL: %.5f\n", criterio_de_parada); 
+           printf("MAIOR VALOR DAS SUBTRACOES EM MODULO: %.2f\n",PontoCritico(resultado_x0_menos_x1));
+           printf("VALOR  MAXIMO DE  X1 EM MODULO: %.2f\n",PontoCritico(vetor_x_um));
+           
+           printf("VALOR DO CRITERIO DE PARADA ATUAL GAUSS: %.5f\n", criterio_de_parada); 
            printf("VALOR DA PRECISÃO: %.5f\n", precisao);
-           printf("NUMERO DE INTERAÇOES: %d\n ",numero_interacoes);
-            printf("=================================CRITERIO DE PARADA================================\n\n");
+           printf("NUMERO DE INTERAÇOES GAUSS: %d\n ",numero_interacoes);
+            printf("=======RESULTADOS DO CRITERIO DE PARADA GAUSS===============\n\n");
           
-           if(criterio_de_parada>precisao){
+          if(criterio_de_parada>precisao){
+        
                 for(int troca=1;troca<=4;troca++){
              vetor_x_zero[troca]=vetor_x_um[troca];
              vetor_x_um[troca]=0;
          }
-             calculaIntegracaoJacobi(diagonal,resultados_de_cada_linha,matriz,vetor_x_um,vetor_x_zero,numero_interacoes);
+             calculaIntegracaoGauss(diagonal,resultados_de_cada_linha,matriz,vetor_x_um,vetor_x_zero,numero_interacoes);
            
              
+         
+             
          }
+         
           
          }
-  
+   
 int main()
 {
   float matriz[4][4];     //MATRIZ PRINCIPAL
@@ -180,9 +218,10 @@ int main()
   int resultado_coluna[5]={0,0,0,0,0};//GUARDA A SOMA DAS COLUNAS
   float posicoes_iguais[4];   //GUARDA AS POSIÇOES DA DIAGONAL
   float resultado_equacoes[4];//GUARDA O RESULTADO FINAL DE CADA LINHA
-  float solucao_final_um[4]; //GUARDA A SEQUENCIA DE PONTOS ATE CONVERGIR
+  float solucao_final_um[5]={0,0,0,0,0}; //GUARDA A SEQUENCIA DE PONTOS ATE CONVERGIR
  float vetor_x_zero[4];
   int numero_interacoes=0;
+  int escolha_metodo,metodo1,metodo2;
  
     for(int i=1;i<=4;i++){//CRIANDO A MATRIZ 4X4
         somaLinha=0;
@@ -216,11 +255,16 @@ int main()
          }
     
     
-    //FUNÇÃO PARA VERIFICAR SE ATENDE OS CRITERIOS DAS LINHAS E COLUNAS
+   // FUNÇÃO PARA VERIFICAR SE ATENDE OS CRITERIOS DAS LINHAS E COLUNAS
     convergenciaJacobiDiagonalLinhas(resultado_linha,resultado_coluna,matriz);
+    /*
+   
+    */
+   //calculaIntegracaoJacobi(posicoes_iguais,resultado_equacoes,matriz,solucao_final_um,vetor_x_zero,numero_interacoes);
+    // calculaIntegracaoGauss(posicoes_iguais,resultado_equacoes,matriz,solucao_final_um,vetor_x_zero,numero_interacoes);
+    return 0;
+    Chama(posicoes_iguais,resultado_equacoes,matriz,solucao_final_um,vetor_x_zero,numero_interacoes);
     
-    
-    // calculaIntegracaoJacobi(posicoes_iguais,resultado_equacoes,matriz,solucao_final_um,vetor_x_zero,numero_interacoes);
-     calculaIntegracaoGauss(posicoes_iguais,resultado_equacoes,matriz,solucao_final_um,vetor_x_zero,numero_interacoes);
+   
     
 }
