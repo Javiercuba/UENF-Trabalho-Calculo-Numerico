@@ -64,7 +64,7 @@ int main()
        printf("Soma total da Coluna %d = %d\n",teste,resultado_coluna[teste]);
     }
       
-    printf("===========================================================================\n");
+   
     
    // FUNÇÃO PARA VERIFICAR SE ATENDE OS CRITERIOS DAS LINHAS E COLUNAS
     convergenciaJacobiDiagonalLinhas(resultado_linha,resultado_coluna,matriz);
@@ -74,8 +74,11 @@ printf("========================================================================
 
 printf("===========================================================================\n");
     
-    calculaIntegracaoJacobi(posicoes_iguais,resultado_equacoes,matriz,solucao_final_um,vetor_x_zero,numero_interacoes);
+    
+   
     calculaIntegracaoGauss(posicoes_iguais,resultado_equacoes,matriz,solucao_final_um,vetor_x_zero,numero_interacoes);
+CriaVetorInicial(vetor_x_zero, resultado_equacoes, posicoes_iguais);
+calculaIntegracaoJacobi(posicoes_iguais,resultado_equacoes,matriz,solucao_final_um,vetor_x_zero,numero_interacoes);
    
 }
 
@@ -159,7 +162,6 @@ float ZerarETroca(float vetor_um[4],float vetor_troca[4]){
 }
 
 int ResultadoSubtracao(float resultado_subtracao[4], float x0[4],float x1[4]){
-    printf("=================================RESULTADO DA SUBTRAÇAO DO VETOR X0 COM X1================================\n");
             for(int c=1;c<=4;c++ ){
                      resultado_subtracao[c]=x0[c] - x1[c];
                    //  printf("RESULTADO DA SUBTRAÇÃO: %.2f\n",resultado_subtracao[c]);
@@ -170,12 +172,9 @@ int calculaIntegracaoJacobi(float diagonal[4],float resultados_de_cada_linha[4],
     numero_interacoes++;
       float  guarda_somatorio=0,resultado_x0_menos_x1[4]={0,0,0,0};
       float criterio_de_parada=0;
-     //float precisao=0.00004;
-     float precisao=0.05;
-    
+     float precisao=0.00004;    
          
-         printf("===========================================================================\n");
-         
+          
          for(int i=1;i<=4;i++){
          guarda_somatorio=0;
              for(int j=1;j<=4;j++){
@@ -186,54 +185,42 @@ int calculaIntegracaoJacobi(float diagonal[4],float resultados_de_cada_linha[4],
                   }
                   
                   vetor_x_um[i]=(1/diagonal[i]) * (resultados_de_cada_linha[i] - (guarda_somatorio) );
-           // printf("RESULTADO FINAL X1:%.2f\n",vetor_x_um[i]);
+          //    printf("RESULTADO FINAL X1:%.2f\n",vetor_x_um[i]);
             
          }
           ResultadoSubtracao(resultado_x0_menos_x1,vetor_x_zero,vetor_x_um);
           
-           printf("======================RESULTADO CRITERIO DE PARADA JACOBI================================\n\n");
+           printf("=========RESULTADO CRITERIO DE PARADA JACOBI================================\n\n");
           
-          criterio_de_parada=PontoCritico(resultado_x0_menos_x1)/PontoCritico(vetor_x_um);
+           criterio_de_parada=PontoCritico(resultado_x0_menos_x1)/PontoCritico(vetor_x_um);
            printf("MAIOR VALOR DAS SUBTRACOES EM MODULO: %.2f\n",PontoCritico(resultado_x0_menos_x1));
            printf("VALOR  MAXIMO DE  X1 EM MODULO: %.2f\n",PontoCritico(vetor_x_um));
            
            printf("VALOR DO CRITERIO DE PARADA ATUAL: %.5f\n", criterio_de_parada); 
            printf("VALOR DA PRECISÃO: %.5f\n", precisao);
            printf("NUMERO DE INTERAÇOES JACOBI: %d\n ",numero_interacoes);
-           printf("======================RESULTADO CRITERIO DE PARADA JACOBI================================\n\n");
+          
             
            
-         //  if(criterio_de_parada>precisao){
-           if(numero_interacoes<2){    
+           if(criterio_de_parada>precisao){   
             ZerarETroca(vetor_x_zero,vetor_x_um);
             calculaIntegracaoJacobi(diagonal,resultados_de_cada_linha,matriz,vetor_x_um,vetor_x_zero,numero_interacoes);
            
-          }else{
-		printf("JACOBI ACABOU AQUI !!\n ZERANDO VALORES...\n");
- 	  //ZERA VALORES??
-		//diagonal? NAO
-	CriaVetorInicial(vetor_x_zero, resultados_de_cada_linha, diagonal);
-						//resultados_de_cada_linha? 
-	vetor_x_zero=0;
-	        //matriz?  NAO
-		//vetor_x_um?	
-		//vetor_x_zero? SIM
-		//numero_interacoes? NAO		
-}
+          }
          }
          
 int calculaIntegracaoGauss(float diagonal[4],float resultados_de_cada_linha[4],float matriz[4][4],float vetor_x_um[4],float vetor_x_zero[4],int numero_interacoes){
     numero_interacoes++;
       float  guarda_somatorio=0,resultado_x0_menos_x1[4]={0,0,0,0};
       float criterio_de_parada=0;
-     // float precisao=0.00004;
+      float precisao=0.00004;
       float troca_valores[4];
-       float precisao=0.05;//teste
+      
       
       //MOSTRANDO VALORES NO VETOR INCIAL x0
          for(int add=1;add<=4;add++){
              troca_valores[add]= vetor_x_zero [add];
-            printf("RESULTADO INICIAL  X%d %.2f\n",numero_interacoes-1,vetor_x_zero[add]);
+            //printf("RESULTADO INICIAL  X%d %.2f\n",numero_interacoes-1,vetor_x_zero[add]);
          }
          
          printf("===========================================================================\n");
