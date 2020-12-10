@@ -16,13 +16,13 @@ float TrocaGauss(float vetor_zero[4], float vetor_um[4], float troca_valores[4],
 
 void ZerarETroca(float vetor_um[4], float vetor_troca[4]);
 
-int ResultadoSubtracao(float resultado_subtracao[4], float x0[4], float x1[4]);
+int ResultadoSubtracao(float resultado_subtracao[4], float x0[4], float x1[4],int interacoes);
 
 int calculaIntegracaoJacobi(float diagonal[4], float resultados_de_cada_linha[4], float matriz[4][4], float vetor_x_um[4], float vetor_x_zero[4], int numero_interacoes);
 
 int calculaIntegracaoGauss(float diagonal[4], float resultados_de_cada_linha[4], float matriz[4][4], float vetor_x_um[4], float vetor_x_zero[4], int numero_interacoes);
+void espaco();
 
-void MostraVetor(float matriz[4][4], float resultados_equacoes[4]);
 int main()
 {
     float matriz[4][4];                          //MATRIZ PRINCIPAL
@@ -60,15 +60,19 @@ int main()
         printf("Digite o resultado da equacao %d = ", i);
         scanf("%f", &resultado_equacoes[i]);
 
-        printf("Soma total da Linha %d = %d\n\n", i, resultado_linha[i]);
+       
     }
     for (int teste = 1; teste <= 4; teste++)
     {
         printf("Soma total da Coluna %d = %d\n", teste, resultado_coluna[teste]);
     }
+    espaco();
+    for (int teste = 1; teste <= 4; teste++)
+    {
+        printf("Soma total da Linha %d = %d\n", teste, resultado_coluna[teste]);
+    }
 
-    MostraVetor(matriz, resultado_equacoes);
-
+espaco();
     // FUNÇÃO PARA VERIFICAR SE ATENDE OS CRITERIOS DAS LINHAS E COLUNAS
     convergenciaJacobiDiagonalLinhas(resultado_linha, resultado_coluna, matriz);
     printf("===========================================================================\n");
@@ -80,17 +84,6 @@ int main()
     calculaIntegracaoGauss(posicoes_iguais, resultado_equacoes, matriz, solucao_final_um, vetor_x_zero, numero_interacoes);
     CriaVetorInicial(vetor_x_zero, resultado_equacoes, posicoes_iguais);
     calculaIntegracaoJacobi(posicoes_iguais, resultado_equacoes, matriz, solucao_final_um, vetor_x_zero, numero_interacoes);
-}
-void MostraVetor(float matriz[4][4], float resultados_equacoes[4])
-{
-
-    for (int i = 1; i <= 4; i++)
-    {
-        for (int j = 1; j <= 4; j++)
-        {
-            printf(" | %.0f %.0f %.0f %.0f |= %.0f\n\n", matriz[i][j], matriz[i][j], matriz[i][j], matriz[i][j], resultados_equacoes[i]);
-        }
-    }
 }
 
 int convergenciaJacobiDiagonalLinhas(int compara_linha[4], int compara_coluna[4], float matriz_geral[4][4])
@@ -124,6 +117,7 @@ int convergenciaJacobiDiagonalLinhas(int compara_linha[4], int compara_coluna[4]
             }
         }
     }
+    espaco();
     passou_no_teste ? printf("Atende os criterios de Convergencia\n\n\n") : printf("Não atende os criterios de Convergencia\n\n\n");
 }
 void CriaVetorInicial(float x_zero[4], float resultado[4], float posicoes_iguais[4])
@@ -134,6 +128,12 @@ void CriaVetorInicial(float x_zero[4], float resultado[4], float posicoes_iguais
         x_zero[add] = resultado[add] / posicoes_iguais[add];
         printf("RESULTADO INICIAL  X0 %.2f\n", x_zero[add]);
     }
+    espaco();
+}
+
+void espaco()
+{
+  printf("\n\n");
 }
 
 float VetorTodoPositivo(float x)
@@ -201,12 +201,12 @@ void ZerarETroca(float vetor_um[4], float vetor_troca[4])
     }
 }
 
-int ResultadoSubtracao(float resultado_subtracao[4], float x0[4], float x1[4])
+int ResultadoSubtracao(float resultado_subtracao[4], float x0[4], float x1[4],int interacoes)
 {
     for (int c = 1; c <= 4; c++)
     {
         resultado_subtracao[c] = x0[c] - x1[c];
-        printf("RESULTADO DA SUBTRAÇÃO : %.2f\n", resultado_subtracao[c]);
+        printf("RESULTADO DA SUBTRAÇÃO X%d-X%d : %.5f\n",interacoes-1,interacoes, resultado_subtracao[c]);
     }
 }
 
@@ -230,20 +230,20 @@ int calculaIntegracaoJacobi(float diagonal[4], float resultados_de_cada_linha[4]
         }
 
         vetor_x_um[i] = (1 / diagonal[i]) * (resultados_de_cada_linha[i] - (guarda_somatorio));
-        printf("RESULTADO FINAL X1:%.2f\n", vetor_x_um[i]);
+//        printf("RESULTADO FINAL X1:%.2f\n", vetor_x_um[i]);
     }
-    ResultadoSubtracao(resultado_x0_menos_x1, vetor_x_zero, vetor_x_um);
+    ResultadoSubtracao(resultado_x0_menos_x1, vetor_x_zero, vetor_x_um,numero_interacoes);
     printf("\n\n");
     printf("=========RESULTADO CRITERIO DE PARADA JACOBI=============\n\n");
 
     criterio_de_parada = PontoCritico(resultado_x0_menos_x1) / PontoCritico(vetor_x_um);
-    printf("MAIOR VALOR DAS SUBTRACOES EM MODULO: %.2f\n", PontoCritico(resultado_x0_menos_x1));
+    printf("MAIOR VALOR DAS SUBTRACOES EM MODULO: %.5f\n", PontoCritico(resultado_x0_menos_x1));
     printf("VALOR  MAXIMO DE  X1 EM MODULO: %.2f\n", PontoCritico(vetor_x_um));
 
     printf("#   VALOR DO CRITERIO DE PARADA ATUAL: %.5f\n", criterio_de_parada);
     printf("#    VALOR DA PRECISÃO: %.5f                \n", precisao);
     printf("#    NUMERO DE INTERAÇOES JACOBI: %d        \n ", numero_interacoes);
-
+espaco();
     if (criterio_de_parada > precisao)
     {
         ZerarETroca(vetor_x_zero, vetor_x_um);
@@ -283,14 +283,10 @@ int calculaIntegracaoGauss(float diagonal[4], float resultados_de_cada_linha[4],
     }
 
     printf("================================================================\n");
-    for (int c = 1; c <= 4; c++)
-    {
-        resultado_x0_menos_x1[c] = vetor_x_zero[c] - vetor_x_um[c];
-        printf("RESULTADO DA SUBTRAÇÃO X%d-X%d: %.5f\n", numero_interacoes - 1, numero_interacoes, resultado_x0_menos_x1[c]);
-    }
+     ResultadoSubtracao(resultado_x0_menos_x1,vetor_x_zero,vetor_x_um,numero_interacoes);  
 
     printf("=======RESULTADOS DO CRITERIO DE PARADA GAUSS===============\n\n");
-
+espaco();
     criterio_de_parada = PontoCritico(resultado_x0_menos_x1) / PontoCritico(vetor_x_um);
 
     printf("MAIOR VALOR DAS SUBTRACOES EM MODULO: %.2f\n", PontoCritico(resultado_x0_menos_x1));
@@ -300,7 +296,7 @@ int calculaIntegracaoGauss(float diagonal[4], float resultados_de_cada_linha[4],
     printf("VALOR DA PRECISÃO: %.5f\n", precisao);
     printf("NUMERO DE INTERAÇOES GAUSS: %d\n ", numero_interacoes);
     printf("=======RESULTADOS DO CRITERIO DE PARADA GAUSS===============\n\n");
-
+espaco();
     if (criterio_de_parada > precisao)
     {
         ZerarETroca(vetor_x_zero, vetor_x_um); //FUNCAO PARA ZERAR OS VALORES e trocar
