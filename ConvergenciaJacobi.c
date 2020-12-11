@@ -1,3 +1,7 @@
+//Grupo
+//Javier Ernesto Lopez
+//Daniel de Faria Ferreira
+//José Marcos N S Filho
 
 #include <stdio.h>
 #include <stdbool.h>
