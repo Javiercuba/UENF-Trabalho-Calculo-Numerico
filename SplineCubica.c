@@ -9,9 +9,9 @@ int main(){
     float Fx[5]={0,0.5,1,1.5,2}, Fy[5]={-(1),-(0.62),1,4.62,11};
     float alfa[5];
     int i;
-    float diferenca_h=0.5;
-    
-
+    float diferenca_h=0.5; //x[i-1]-x[i]
+    float  integral_h=1; //(x5-x0)/2 = 1
+    float valor_integral;
     //Inicio do passo 2
     for(i=1;i<=tamanho_indice-1;i++){
         alfa[i] = ((3/diferenca_h)*(Fy[i+1] - Fy[i]) - (3/diferenca_h) * (Fy[i]-Fy[i-1]));
@@ -46,5 +46,8 @@ int main(){
     for(i = 0; i <=tamanho_indice-1;i++){
         printf("s[%d] = %.1f + %.2f*(x-%.2f) + %.2f*(x-%.2f)^2 + %.2f(x-%.2f)^3\n",i, Fy[i], b[i], Fx[i], c[i], Fx[i],d[i],Fx[i]);
     }
+
+  valor_integral=(integral_h/3)*(Fy[0]+(4*Fy[1])+(2*Fy[2])+(4*Fy[3])+(2*Fy[4]));
+  printf("%f",valor_integral);
 
 }
