@@ -1,3 +1,7 @@
+//Grupo
+//Javier Ernesto Lopez
+//Daniel de Faria Ferreira
+//José Marcos N S Filho
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -85,8 +89,12 @@ espaco();
     CriaVetorInicial(vetor_x_zero, resultado_equacoes, posicoes_iguais);
     calculaIntegracaoJacobi(posicoes_iguais, resultado_equacoes, matriz, solucao_final_um, vetor_x_zero, numero_interacoes);
     espaco();
+<<<<<<< HEAD
   printf("Resposta questao (C):Existe Diferenca entre os dois metodos\npois o Gauss usa os valores atuais e os anteriores e o\n Jacobi usa só os anteriores da interação atual ");
   espaco();
+=======
+    printf("Resposta questao (C):Existe Diferenca entre os dois metodos \n pois o Gauss usa os valores atuais e os anteriores e o \n Jacobi usa só os anteriores da interação atual ")
+>>>>>>> 1fadd6ac3d4540e9de22ffa09c89af41fb7822cd
 }
 
 int convergenciaJacobiDiagonalLinhas(int compara_linha[4], int compara_coluna[4], float matriz_geral[4][4])
