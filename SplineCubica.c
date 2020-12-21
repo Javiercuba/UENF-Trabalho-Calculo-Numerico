@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdbool.h>
-
+//FUNCAO PARA CRIAR Sx DAS FUNCOES
 void cria_s_da_funcao(char nome_funcao,float valor_sx[],float funcao_y[],float x_inicial[],float diferenca_h);
+//FUNCAO PARA INTEGRAR AS FUNCOES
+void integracao_simpson(char nome_funcao,float h,float funcao_y[]);
 
 int main(){
     int tamanho_indice=5;//n
@@ -16,8 +18,10 @@ int main(){
  cria_s_da_funcao('F',sx,Fx,x_inicial,diferenca_h);   
  printf("\n");
  cria_s_da_funcao('H',sx,Hx,x_inicial,diferenca_h);
-
-
+ printf("\n");
+ integracao_simpson('F',integral_h,Fx);
+ printf("\n");
+ integracao_simpson('H',integral_h,Hx);
 }
 
 //FUNCAO PARA CRIAR Sx DAS FUNCOES
@@ -39,4 +43,11 @@ void cria_s_da_funcao(char nome_funcao,float valor_sx[],float funcao_y[],float x
     valor_sx[i]=0;
   } 
 
+}
+//FUNCAO PARA INTEGRAR AS FUNCOES PELO METODO DE SIMPSON
+void integracao_simpson(char nome_funcao,float h,float funcao_y[]){
+  float resultado_integracao;
+
+  resultado_integracao=(h/3)*(funcao_y[0]+(4*funcao_y[1])+(2*funcao_y[2])+(4*funcao_y[3])+(2*funcao_y[4]));
+  printf("Intregracao da funcao %c(x)= %.2f\n",nome_funcao,resultado_integracao);
 }
