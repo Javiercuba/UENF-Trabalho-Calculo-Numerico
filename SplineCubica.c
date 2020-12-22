@@ -8,8 +8,10 @@ void integracao_simpson(char nome_funcao,float h,float funcao_y[]);
 int main(){
     int tamanho_indice=5;//n
     float x_inicial[]={0,0,0.5,1,1.5,2};
-    float Hx[5]={0,0.79,2.29,4.47,6.72};//FUNCAO h(x) COM VALORES PRE-DEFINIDOS
-    float Fx[5]={-(1),-(0.62),1,4.62,11};//FUNCAO f(x) COM VALORES PRE-DEFINIDOS
+    float integral_Fx[5]={-(0.5),0.32,0.4,2.07,4.89};//PONTOS DA INTEGRACAO DE FX
+    float Fx[5]={0,0.79,2.29,4.47,6.72};//FUNCAO f(x) COM VALORES PRE-DEFINIDOS
+    float integral_Hx[5]={0,-(0.44),-(0.41),0.89,4.66};//PONTOS DA INTEGRACAO DE HX
+    float Hx[5]={-(1),-(0.62),1,4.62,11};//FUNCAO h(x) COM VALORES PRE-DEFINIDOS
     float sx[4];//VETOR PARA ARMAZENAR OS RESULTADOS DAS INTERPOLACOES DE CADA FUNCAO
     float diferenca_h=0.5; //x[i-1]-x[i]
     float  integral_h=1; //(x5-x0)/2 = 1
@@ -22,7 +24,9 @@ int main(){
  integracao_simpson('F',integral_h,Fx);
  printf("\n");
  integracao_simpson('H',integral_h,Hx);
+ printf("\n");
 }
+
 
 //FUNCAO PARA CRIAR Sx DAS FUNCOES
 void cria_s_da_funcao(char nome_funcao,float valor_sx[],float funcao_y[],float x_inicial[],float diferenca_h){
