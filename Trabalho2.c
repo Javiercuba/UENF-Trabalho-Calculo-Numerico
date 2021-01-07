@@ -12,6 +12,8 @@ int main(){
     float Hx[5]={-(1),-(0.62),1,4.62,11};//VALORES PRE-DEFINIDOS DA FUNCAO Hx(x)
     float integral_h=1;//(x5-x0)/2
     
+
+
     //CRIA SPLINE CUBICA DA FUNCAO Fx
     CriaSplineCubica('F',x,Fx,diferenca_h);
     printf("\n"); 
